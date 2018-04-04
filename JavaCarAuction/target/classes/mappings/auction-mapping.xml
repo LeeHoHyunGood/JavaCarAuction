@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AuctionDAO">
+
+	<insert id="insertAuction" parameterType="auction">
+		<![CDATA[
+		insert into t_auction
+		values(auction_sequence.nextval, #{acc_idx}, #{auc_type}, #{auc_maker}, #{auc_model}, #{auc_title}, #{auc_writer}, #{auc_content}, (select to_char(sysdate + 5, 'yyyy,mm,dd,hh24,mi,ss')
+   from dual), #{auc_startvalue}, #{auc_startvalue}, #{auc_counter}, #{auc_year}, #{auc_mileage}, #{auc_driving}, #{auc_displacement}, #{auc_shift}
+   , #{auc_color}, #{auc_fuel}, #{auc_seizure}, #{auc_accident}, #{auc_carnumber}, 1)
+		]]>
+	</insert>
+	
+	<insert id="insertOption" parameterType="optionAuction">
+		<![CDATA[
+		insert into option_auction
+		values(option_sequence.nextval, (select max(auc_idx) from t_auction), #{oa_option}, 1)
+		]]>
+	</insert>
+	
+	<insert id="insertFile" parameterType="fileUpload">
+		<![CDATA[
+		insert into auction_file
+		values(file_sequence.nextval, (select max(auc_idx) from t_auction), #{file_name}, #{file_size}, 1)
+		]]>
+	</insert>
+	
+	<insert id="insertBidding" parameterType="auctionBidding">
+		insert into auction_bidding
+		values(#{auc_idx}, #{acc_max_idx}, #{acc_agomax_idx}, #{ab_maxvalue}, 1)
+	</insert>
+	
+	<insert id="addHotAuction" parameterType="auction">
+		insert into hot_auction select * from t_auction where auc_idx = #{auc_idx} order by auc_counter desc
+	</insert>
+	
+	<update id="updateValue" parameterType="auction">
+		update t_auction set auc_value = #{auc_value}, auc_counter = #{auc_counter} where auc_idx = #{auc_idx}
+	</update>
+	
+	<update id="updateBidding" parameterType="auctionBidding">
+		update auction_bidding set acc_max_idx = #{acc_max_idx}, acc_agomax_idx = #{acc_agomax_idx}, ab_maxvalue = #{ab_maxvalue} where auc_idx = #{auc_idx}
+	</update>
+	
+	<update id="buyerUpdata" parameterType="user">
+		update t_account set acc_money = #{acc_money}, acc_point = #{acc_point} where acc_idx = #{acc_idx}
+	</update>
+	
+	<update id="sellerUpdata" parameterType="user">
+		update t_account set acc_money = #{acc_money}, acc_point = #{acc_point} where acc_idx = #{acc_idx}
+	</update>
+	
+	<update id="timeExtension" parameterType="auction">
+		update t_auction set auc_time = #{auc_time} where auc_idx = #{auc_idx}
+	</update>
+	
+	<update id="getAuctionDelete" parameterType="auction">
+		update t_auction set auc_complete = 2 where auc_idx = #{auc_idx}
+	</update>
+	
+	<update id="optionDelete" parameterType="auction">
+		update option_auction set oa_complete = 2 where auc_idx = #{auc_idx}
+	</update>
+	
+	<update id="fileDelete" parameterType="auction">
+		update auction_file set file_complete = 2 where auc_idx = #{auc_idx}
+	</update>
+	
+	<update id="biddingDelete" parameterType="auction">
+		update auction_bidding set ab_complete = 2 where auc_idx = #{auc_idx}
+	</update>
+	
+	<delete id="getHotAuctionDelete" parameterType="auction">
+		delete from hot_auction where auc_idx = #{auc_idx}
+	</delete>
+	
+	<select id="getAuction" resultType="auction">
+		select * from t_auction where auc_idx = #{auc_idx}
+	</select>
+	
+	<select id="auctionOption" resultType="optionAuction">
+		select * from option_auction where auc_idx = #{auc_idx}
+	</select>
+	
+	<select id="auctionFile" resultType="fileUpload">
+		select * from auction_file where auc_idx = #{auc_idx}
+	</select>
+	
+	<select id="searchAuction" resultType="auction">
+		select * from(select ROWNUM as rnum, y.* from (select a.*, x.img from t_auction a left join (select b.auc_idx, min(r.file_name) img
+    from t_auction b, auction_file r where b.auc_idx = r.auc_idx group by b.auc_idx) x on a.auc_idx = x.auc_idx
+    <choose>
+    	<when test="auc_maker == '' and auc_maker == ''">
+		where auc_complete = 1
+		order by a.auc_idx desc)y)
+    		where rnum between #{page}*8+1 and #{page}*8+8
+		</when>
+    	<when test="auc_maker == null || auc_maker == '---선택하세요---' || auc_maker == '-----'">
+    	where auc_complete = 1
+    	order by a.auc_idx desc)y)
+    		where rnum between #{page}*8+1 and #{page}*8+8
+		</when>
+		<when test="auc_maker != null and auc_model == '---선택하세요---'">
+		where auc_maker = #{auc_maker} and auc_complete = 1
+		order by a.auc_idx desc)y)
+			where rnum between #{page}*8+1 and #{page}*8+8
+		</when>
+		<when test="auc_maker != null and auc_maker != null">
+		where auc_maker = #{auc_maker} and auc_model = #{auc_model} and auc_complete = 1
+		order by a.auc_idx desc)y)
+    		where rnum between #{page}*8+1 and #{page}*8+8
+		</when>
+		<otherwise>
+		where auc_complete = 1
+		order by a.auc_idx desc)y)
+			where rnum between #{page}*8+1 and #{page}*8+8
+		</otherwise>
+		</choose>
+	</select>
+	
+	<select id="auctionList" resultType="auction">
+		select * from(select ROWNUM as rnum, y.* from (select a.*, x.img from t_auction a left join (select b.auc_idx, min(r.file_name) img
+    from t_auction b, auction_file r where b.auc_idx = r.auc_idx group by b.auc_idx) x on a.auc_idx = x.auc_idx
+    <choose>
+    	<when test="auc_type ==  '0000'">
+    		where auc_complete = 1
+    		order by a.auc_idx desc)y)
+    		where rnum between #{page}*8+1 and #{page}*8+8
+		</when>
+		<otherwise>
+			where auc_type = #{auc_type} and auc_complete = 1
+			order by a.auc_idx desc)y)
+			where rnum between #{page}*8+1 and #{page}*8+8
+		</otherwise>
+    </choose>
+	</select>
+	
+	<select id="auctionCount" parameterType="auction" resultType="int">
+		select count(*) from t_auction
+		<choose>
+    	<when test="auc_type ==  '0000'">
+    	where auc_complete = 1
+		</when>
+		<when test="auc_type ==  '0001' || auc_type ==  '0002' || auc_type ==  '0003' || auc_type ==  '0004' || auc_type ==  '0005' || auc_type ==  '0006' || auc_type ==  '0007' || auc_type ==  '0008' ">
+			where auc_type = #{auc_type} and auc_complete = 1
+		</when>
+		<when test="auc_maker == null || auc_maker == '---선택하세요---' || auc_maker == '-----'">
+		where auc_complete = 1
+		</when>
+		<when test="auc_maker != null and auc_model == '---선택하세요---' || auc_maker != null and auc_model == null">
+			where auc_maker = #{auc_maker} and auc_complete = 1
+		</when>
+		<when test="auc_maker != null and auc_maker != null">
+    		where auc_maker = #{auc_maker} and auc_model = #{auc_model} and auc_complete = 1
+		</when>
+		<otherwise>
+		</otherwise>
+    </choose>
+	</select>
+	
+	<select id="getMaxBidding" resultType="auctionBidding">
+		select * from auction_bidding where auc_idx = #{auc_idx}
+	</select>
+	
+	<select id="auctionAllList" resultType="auction">
+		select * from(select ROWNUM as page, y.* from (select a.*, x.img from t_auction a left join (select b.auc_idx, min(r.file_name) img
+    from t_auction b, auction_file r where b.auc_idx = r.auc_idx group by b.auc_idx) x on a.auc_idx = x.auc_idx where auc_complete = 1
+    order by a.auc_idx desc)y)
+	</select>
+	
+	<select id="hotAuctionList" resultType="auction">
+		select * from(select ROWNUM as page, y.* from (select a.*, x.img from hot_auction a left join (select b.auc_idx, min(r.file_name) img
+    from hot_auction b, auction_file r where b.auc_idx = r.auc_idx group by b.auc_idx) x on a.auc_idx = x.auc_idx where auc_complete = 1
+    order by a.auc_idx desc)y)
+	</select>
+	
+	<select id="auctionBidding" parameterType="auction" resultType="auctionBidding">
+		select * from auction_bidding where auc_idx = #{auc_idx}
+	</select>
+	
+	<select id="getAdvertising" parameterType="auction" resultType="java.lang.Integer">
+		select count(auc_complete) from t_auction where auc_complete=#{auc_complete}
+	</select>
+</mapper>

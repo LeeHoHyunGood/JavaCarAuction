@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="UserDAO">
+
+	<insert id="insertUser" parameterType="user">
+		insert into t_account (acc_idx, acc_id, acc_pw, acc_nickname, acc_name, acc_email, acc_hp, acc_sex, acc_birthday, acc_money, acc_point, acc_grade)
+		values(account_sequence.nextval,#{acc_id},#{acc_pw},#{acc_nickname},#{acc_name},#{acc_email},#{acc_hp},#{acc_sex},#{acc_birthday},#{acc_money},#{acc_point},#{acc_grade})
+	</insert>
+	
+	<insert id="sendFacing" parameterType="facing">
+		insert into t_facing
+		values(facing_sequence.nextval,#{acc_idx},#{sender_acc_idx},#{facing_sender},#{facing_title},#{facing_content},(select to_char(sysdate, 'yyyy/mm/dd/hh24/mi/ss') from dual))
+	</insert>
+
+	<update id="updateUser" parameterType="user">
+		<![CDATA[
+			UPDATE t_account
+			SET
+			acc_pw=#{acc_pw},
+			acc_nickname=#{acc_nickname},
+			acc_hp=#{acc_hp}
+			WHERE
+			acc_idx = #{acc_idx}
+		]]>
+	</update>
+	
+	<update id="authUser" parameterType="user">
+		<![CDATA[
+			UPDATE t_account SET certification=1 WHERE acc_email=#{acc_email}
+		]]>
+	</update>
+	
+	<update id="updateGrade" parameterType="user">
+			UPDATE t_account SET acc_grade = #{acc_grade} WHERE acc_idx=#{acc_idx}
+	</update>
+	
+	<update id="loginUser" parameterType="user">
+			UPDATE t_account SET acc_logtime = (select sysdate from dual) WHERE acc_idx=#{acc_idx}
+	</update>
+	
+	<delete id="deleteUser" parameterType="user">
+		delete from t_account where
+		acc_idx = #{acc_idx}
+	</delete>
+	
+	<delete id="deleteFacing" parameterType="facing">
+		delete from t_facing where
+		facing_idx = #{facing_idx}
+	</delete>
+	
+	<delete id="deleteAllFacing" parameterType="facing">
+		delete from t_facing where
+		acc_idx = #{acc_idx}
+	</delete>
+	
+	<select id="getUser" parameterType="user" resultType="user">
+		select * from(select y.* from (select a.*, x.facing from t_account a left join (select b.acc_idx, count(r.acc_idx) facing
+    	from t_account b, t_facing r where b.acc_idx = r.acc_idx group by b.acc_idx) x on a.acc_idx = x.acc_idx
+    	order by a.acc_idx desc)y) where acc_id=#{acc_id} and acc_pw = #{acc_pw}
+	</select>
+	
+	<select id="userList" resultType="user">
+		select * from t_account
+	</select>
+
+<select id="getUsersByID" parameterType="user" resultType="user">
+		select * from t_account
+		where acc_idx = #{acc_idx}
+	</select>
+
+	<select id="checkId" parameterType="com.springgame.biz.user.UserVO" resultType="java.lang.Integer">
+		select nvl(count(*),0) from t_account
+		where acc_id = #{acc_id}
+	</select>
+	
+	<select id="checkNickName" parameterType="user" resultType="java.lang.Integer">
+		<![CDATA[
+			select nvl(count(*),0) from t_account
+			where acc_nickname = #{acc_nickname}
+		]]>
+	</select>
+	
+	<select id="userMoney" parameterType="user" resultType="user">
+			select acc_money from t_account
+			where acc_idx = #{acc_idx}
+	</select>
+	
+	<select id="facing" parameterType="facing" resultType="java.lang.Integer">
+		select nvl(count(*),0) from t_facing
+		where acc_idx = #{acc_idx}
+	</select>
+	
+	<select id="getFacingList" parameterType="facing" resultType="facing">
+			select * from t_facing
+			where acc_idx = #{acc_idx}
+	</select>
+	
+	<select id="getFacing" parameterType="facing" resultType="facing">
+			select * from t_facing
+			where facing_idx = #{facing_idx}
+	</select>
+</mapper>

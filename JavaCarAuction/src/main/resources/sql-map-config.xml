@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias alias="user" type="com.springgame.biz.user.UserVO" ></typeAlias>
+		<typeAlias alias="category" type="com.springgame.biz.manage.CategoryVO"></typeAlias>
+		<typeAlias alias="auction" type="com.springgame.biz.board.auction.AuctionVO"></typeAlias>
+		<typeAlias alias="optionAuction" type="com.springgame.biz.board.auction.OptionAuctionVO"></typeAlias>
+		<typeAlias alias="fileUpload" type="com.springgame.biz.board.auction.FileUploadVO"></typeAlias>
+		<typeAlias alias="auctionBidding" type="com.springgame.biz.board.auction.AuctionBiddingVO"></typeAlias>
+		<typeAlias alias="timeExtension" type="com.springgame.biz.admin.TimeExtensionRule"></typeAlias>
+		<typeAlias alias="hotAuction" type="com.springgame.biz.admin.HotAuctionRule"></typeAlias>
+		<typeAlias alias="userGrade" type="com.springgame.biz.admin.UserRatingRule"></typeAlias>
+		<typeAlias alias="facing" type="com.springgame.biz.user.FacingVO"></typeAlias>
+		<typeAlias alias="board" type="com.springgame.biz.board.BoardVO"></typeAlias>
+		<typeAlias alias="reply" type="com.springgame.biz.board.ReplyVO"></typeAlias>
+		<typeAlias alias="boardCategory" type="com.springgame.biz.board.BoardCategoryVO"></typeAlias>
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="mappings/board-mapping.xml" />
+		<mapper resource="mappings/user-mapping.xml" />
+		<mapper resource="mappings/manage-mapping.xml"/>
+		<mapper resource="mappings/auction-mapping.xml"/>
+		<mapper resource="mappings/admin-mapping.xml"/>
+	</mappers>
+</configuration>
