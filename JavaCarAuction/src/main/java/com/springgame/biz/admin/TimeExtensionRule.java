@@ -4,7 +4,7 @@ public class TimeExtensionRule {
 	private int tar_idx;
 	private int ter_time_extension;
 	private int ter_end_time;
-	public int getTar_idx() {
+	public int getTer_idx() {
 		return tar_idx;
 	}
 	public void setTar_idx(int tar_idx) {

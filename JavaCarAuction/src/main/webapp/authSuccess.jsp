@@ -19,7 +19,7 @@
    <h3> 정상적으로 인증이 성공하였습니다. 새로 로그인 하세요. </h3>
    <div class="form-group">
       <div class="col-sm-12 text-left">
-        <button class="btn btn-primary" type="button" onclick="location.href='lndex.jsp'">로그인하기<i class="fa fa-times spaceLeft"></i></button>
+        <button class="btn btn-primary" type="button" onclick="location.href='index.jsp'">로그인하기<i class="fa fa-times spaceLeft"></i></button>
       </div>
    </div>
   </article>

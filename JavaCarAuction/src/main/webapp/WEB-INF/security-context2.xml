@@ -13,6 +13,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 <intercept-url pattern="/loginPage.do" access="permitAll" />
 <intercept-url pattern="/index2.do" access="permitAll" />
 <intercept-url pattern="/accountjoin.do" access="permitAll" />
+<intercept-url pattern="/registerAuth_proc.do" access="permitAll" />
 <intercept-url pattern="/chat.jsp" access="hasAnyRole('ROLE_USER')" />
 <intercept-url pattern="/**.do" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
 <intercept-url pattern="/admin*.jsp" access="hasAnyRole('ROLE_ADMIN')" />

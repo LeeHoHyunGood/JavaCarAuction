@@ -5,7 +5,7 @@
 <mapper namespace="AdminDAO">
 	
 	<update id="timeExtension" parameterType="timeExtension">
-		update time_extension_rule set ter_time_extension = #{ter_time_extension}, ter_end_time = #{ter_end_time} where ter_idx = #{ter_idx}
+		update time_extension_rule set ter_time_extension = #{ter_time_extension}, ter_end_time = #{ter_end_time} where tar_idx = #{tar_idx}
 	</update>
 	
 	<update id="hotAuction" parameterType="hotAuction">

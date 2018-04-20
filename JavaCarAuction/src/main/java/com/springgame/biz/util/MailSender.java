@@ -20,13 +20,13 @@ public class MailSender {
 		
 		try {
 			message.addRecipient(RecipientType.TO, new InternetAddress(email));
-			message.setSubject("Java RPG Game 이메일 인증 확인");
-			String url = "http://localhost/account/registerAuth_proc.do?acc_email=" + email + "&key=" + key;
+			message.setSubject("Java Car Auction 이메일 인증 확인");
+			String url = "http://localhost/registerAuth_proc.do?acc_email=" + email + "&key=" + key;
 			System.out.println(" email : " + email + " key : " + key);
 			String sendText = 
-					"<h1>Java RPG Game 이메일 인증 확인</h1>" +
-					"<h3><a href=\"http://localhost/index.jsp\">Java RPG Game 메인 홈페이지 가기</a></h3>" +
-					"<h3>이메일 인증을 해야만 로그인을 할수 있습니다</h3>" + 
+					"<h1>Java Car Auction 이메일 인증 확인</h1>" +
+					"<h3><a href=\"http://localhost/index.jsp\">Java Car Auction 메인 홈페이지 가기</a></h3>" +
+					"<h3>이메일 인증을 해야만 로그인을 할수 있습니다 이미지를 클릭하세요</h3>" + 
 					"<a href=\"" + url + "\">" + "<img src=\"http://localhost/resources/img/jrg-logo.jpg\"></a>";
 			message.setText(sendText, "utf-8", "html");
 		} catch (MessagingException e) {

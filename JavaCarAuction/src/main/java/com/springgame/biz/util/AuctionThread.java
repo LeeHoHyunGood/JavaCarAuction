@@ -69,9 +69,7 @@ public class AuctionThread {
 			public void run() {
 				boolean hotAuctionAdd = false;
 				while (true){
-					System.out.println(11);
 					for (int i = 0; i < auctionList.size(); i++) {
-						System.out.println("°æ¸ÅÀÎµ¦½º"+auctionList.get(i).getAuc_idx());
 						String time = auctionList.get(i).getAuc_time();
 						String yearTime = time.split(",")[0];
 						String ddayTime = time.split(",")[1];
@@ -128,8 +126,10 @@ public class AuctionThread {
 								}
 							}
 						} else {
+							if (auctionList.size() != 0) {
 							auctionService.addHotAuction(auctionList.get(i));
 							hotAuctionList.add(auctionList.get(i));
+							}
 						}
 					}
 					

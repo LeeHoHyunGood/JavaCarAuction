@@ -36,6 +36,7 @@ public class AdminController {
 	
 	@RequestMapping("/adminTimeExtension.do")
 	public void timeExtension(TimeExtensionRule timeExtension) {
+		System.out.println(" : " + timeExtension.getTer_time_extension() + " : " + timeExtension.getTer_end_time());
 		adminService.timeExtension(timeExtension);
 		timeExtensionRule = adminService.getTimeExtension(timeExtension);
 	}

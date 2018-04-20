@@ -48,7 +48,7 @@ public class AccountController {
 		return "index";
 	}
 	
-	@RequestMapping("/account/registerAuth_proc.do")
+	@RequestMapping("/registerAuth_proc.do")
 	public String registerAutoProc(UserVO uvo,
 			@RequestParam(value="key") String key)
 	{

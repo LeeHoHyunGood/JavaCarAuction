@@ -51,12 +51,19 @@ public class LoginController {
 		vo.setAcc_id(userDetails.getUsername());
 		vo.setAcc_pw(userDetails.getPassword());
 		UserVO userVO = userService.getUser(vo);
-        logger.info("Welcome login_success! {}, {}", session.getId(), userDetails.getUsername() + "/" + userDetails.getPassword());
-        session.setAttribute("user", userVO);
-        session.setAttribute("categorylist", cService.getCategoryList());
-        System.out.println(userVO.getFacing());
-        userService.loginUser(userVO);
-        return "index";
+		if (userVO != null) {
+			if (userVO.getCertification()==1) {
+						session.setAttribute("user", userVO);
+						logger.info("Welcome login_success! {}, {}", session.getId(), userDetails.getUsername() + "/" + userDetails.getPassword());
+						session.setAttribute("categorylist", cService.getCategoryList());
+						userService.loginUser(userVO);
+			return "index";
+		} else {
+			throw new IllegalArgumentException("인증이 되지않은 계정입니다");
+		}
+		} else {
+			throw new IllegalArgumentException("아이디와 비밀번호를 찾을 수가 없습니다");
+		}
     }
 	
 	@RequestMapping(value = "/loginPageError.do", method = RequestMethod.GET)

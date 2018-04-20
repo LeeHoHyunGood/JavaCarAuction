@@ -25,7 +25,7 @@
 						<tr>
 							<th style="color: white;">연장 시간</th>
 							<td><input type="text" name="ter_time_extension" />
-								<input type="hidden" name="ter_idx" value="1" />
+								<input type="hidden" name="tar_idx" value="1" />
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/></td>
 						</tr>
 						<tr>
