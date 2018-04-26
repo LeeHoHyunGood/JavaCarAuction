@@ -30,6 +30,9 @@
 				<prop key="java.lang.NullPointerException">
 					account/common/nullPointerError
 				</prop>
+				<prop key="java.lang.IllegalArgumentException">
+					account/common/error
+				</prop>
 			</props>
 		</property>
 		<property name="defaultErrorView" value="account/common/error" />

@@ -59,7 +59,6 @@ public class AuctionThread {
 
 	public void auctionThread() {
 		System.out.println(22);
-		System.out.println(auctionService);
 		auctionList = auctionService.auctionAllList();
 		hotAuctionList = auctionService.hotAuctionAllList();
 		timeExtensionRule = adminService.getTimeExtension(timeExtensionRule);

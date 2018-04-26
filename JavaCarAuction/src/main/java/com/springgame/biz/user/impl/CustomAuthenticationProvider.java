@@ -36,6 +36,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserVO userVO = userDAO.getUser(user);
         logger.info("사용자가 입력한 로그인정보입니다. {}", user_id + "/" + user_pw);
         System.out.println(user_id + " : " + user_pw + " ~ " + userVO);
+        if (userVO == null) {
+        	throw new IllegalArgumentException("아이디와 비밀번호를 찾을 수가 없습니다");
+        }
         if(user_id.equals(userVO.getAcc_id())&&user_pw.equals(userVO.getAcc_pw())){
         	if (userVO.getAcc_id().equals("admin")&&userVO.getAcc_pw().equals("admin")) {
         		logger.info("관리자입니다.");

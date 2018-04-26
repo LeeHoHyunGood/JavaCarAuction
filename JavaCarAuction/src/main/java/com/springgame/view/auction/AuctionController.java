@@ -127,7 +127,8 @@ public class AuctionController {
         }
         System.out.println(aucVO.getAuc_startvalue());
         auctionService.insertAuction(aucVO, optionList, fileList);
-        auctionThread.addThread(aucVO);
+        AuctionVO auctionVo = auctionService.getAuction(aucVO);
+        auctionThread.addThread(auctionVo);
 //        sess.setAttribute("imgss", "resources/img/thumb/cS-1.jpg");
         //실제로는 저장 후 이미지를 불러올 위치를 콜백반환하거나,
         //특정 행위를 유도하는 값을 주는 것이 옳은 것 같다.
